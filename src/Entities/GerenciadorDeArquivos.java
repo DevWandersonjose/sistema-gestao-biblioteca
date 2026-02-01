@@ -1,8 +1,6 @@
 package Entities;
 
-import Entities.Aluno;
-import Entities.Emprestimo;
-import Entities.Livro;
+
 
 import java.io.*;
 import java.util.List;
@@ -67,7 +65,6 @@ public class GerenciadorDeArquivos {
                 bw.newLine();
             }
 
-            // CORREÇÃO: Adicionado o getCodigoBarras() no início
             String linha = livro.getCodigoBarras() + ";" +
                     livro.getNome() + ";" +
                     livro.getAutor() + ";" +
@@ -115,7 +112,6 @@ public class GerenciadorDeArquivos {
                 bw.write("NomeAluno;CodigoBarras;NomeLivro;DataEmprestimo;DataDevolucao");
                 bw.newLine();
             }
-            // Usa o método toCSV que criamos na classe Emprestimo
             bw.write(emp.toCSV());
             bw.newLine();
         } catch (IOException e) {
@@ -134,7 +130,6 @@ public class GerenciadorDeArquivos {
             while (linha != null) {
                 String[] dados = linha.split(";");
                 if (dados.length >= 5) {
-                    // Atenção para a ordem dos parâmetros aqui, deve bater com o construtor 2 de Emprestimo
                     Emprestimo emp = new Emprestimo(dados[0], dados[1], dados[2], dados[3], dados[4]);
                     lista.add(emp);
                 }
@@ -159,7 +154,7 @@ public class GerenciadorDeArquivos {
 
     }
     public static void atualizarArquivoAlunos(List<Aluno> lista) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_ALUNOS, false))) { // false = sobrescrever
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_ALUNOS, false))) {
             bw.write("Nome;Matricula;Classe;Responsavel;Telefone");
             bw.newLine();
             for (Aluno a : lista) {

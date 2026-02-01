@@ -15,7 +15,6 @@ public class Livro {
         this.descricao = descricao;
     }
 
-    // Getters e Setters
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
@@ -30,9 +29,8 @@ public class Livro {
 
     public String getCodigoBarras() { return codigoBarras; }
 
-    // --- CORREÇÃO AQUI ---
     public void setCodigoBarras(String codigoBarras) {
-        this.codigoBarras = codigoBarras; // Faltava o "this."
+        this.codigoBarras = codigoBarras;
     }
 
     @Override

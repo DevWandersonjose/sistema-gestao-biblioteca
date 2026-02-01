@@ -7,8 +7,7 @@ public class Aluno {
     private String responsavel;
     private String numeroTelefone;
 
-    // Construtor Completo
-    public Aluno(String nome, String matricula, String classe, String responsavel, String numeroTelefone) {
+       public Aluno(String nome, String matricula, String classe, String responsavel, String numeroTelefone) {
         this.nome = nome;
         this.matricula = matricula;
         this.classe = classe;
@@ -16,10 +15,10 @@ public class Aluno {
         this.numeroTelefone = numeroTelefone;
     }
 
-    // Construtor Vazio (Útil para frameworks ou inicialização posterior)
+
     public Aluno() {}
 
-    // Getters e Setters
+
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
@@ -35,7 +34,6 @@ public class Aluno {
     public String getNumeroTelefone() { return numeroTelefone; }
     public void setNumeroTelefone(String numeroTelefone) { this.numeroTelefone = numeroTelefone; }
 
-    // Opcional: toString para facilitar testes no console
     @Override
     public String toString() {
         return "Aluno: " + nome + " | Matrícula: " + matricula;

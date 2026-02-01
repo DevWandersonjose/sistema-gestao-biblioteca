@@ -17,7 +17,6 @@ public class BibliotecaService {
         this.emprestimos = new ArrayList<>();
         this.sc = new Scanner(System.in);
 
-        // Carrega os dados assim que o serviço é iniciado
         carregarDados();
     }
 
@@ -73,7 +72,6 @@ public class BibliotecaService {
 
         Livro livroEncontrado = null;
         for (Livro l : livros) {
-            // Verifica se o código digitado bate com o do livro
             if (l.getCodigoBarras().equals(codigoBusca)) {
                 livroEncontrado = l;
                 break;
@@ -93,7 +91,7 @@ public class BibliotecaService {
                 dias = sc.nextInt();
                 sc.nextLine();
             } else {
-                sc.nextLine(); // limpar buffer se errar
+                sc.nextLine();
                 System.out.println("Entrada de dias inválida. Usando 7 dias padrão.");
                 dias = 7;
             }
@@ -131,7 +129,6 @@ public class BibliotecaService {
         Emprestimo emprestimoParaDevolver = null;
 
         for (Emprestimo e : emprestimos) {
-            // Verifica Nome do Aluno E (Nome do Livro OU Código de Barras)
             boolean alunoConfere = e.getNomeAluno().equalsIgnoreCase(nomeAluno);
             boolean livroConfere = e.getNomeLivro().equalsIgnoreCase(termoBusca) ||
                     e.getCodigoBarras().equalsIgnoreCase(termoBusca);
@@ -299,8 +296,24 @@ public class BibliotecaService {
         GerenciadorDeArquivos.salvarLivro(novoLivro);
     }
 
-    public void emprestarLivroInterface(String nomeAluno, String codigoLivro, String nomeLivro, String dataInicial, String dataFinal, String responsavelEntrega) {
-        Livro livroEncontrado = buscarLivroPorTermo(codigoLivro)
+    public boolean emprestarLivroInterface(String nomeAluno, String codigoLivro, String dataInicial, int dias) {
+        Livro livroEncontrado = buscarLivroPorTermo(codigoLivro);
+        if (livroEncontrado == null){
+            return false;
+        }
+        Emprestimo emp = new Emprestimo(nomeAluno, livroEncontrado.getCodigoBarras(), livroEncontrado.getNome(), dataInicial, dias);
+
+        emprestimos.add(emp);
+        GerenciadorDeArquivos.salvarEmprestimo(emp);
+        return true;
+    }
+    public Livro buscarLivroPorTermo(String termo) {
+        for (Livro l : livros) {
+            if (l.getCodigoBarras().equalsIgnoreCase(termo) || l.getNome().equalsIgnoreCase(termo)) {
+                return l;
+            }
+        }
+        return null;
     }
     }
 

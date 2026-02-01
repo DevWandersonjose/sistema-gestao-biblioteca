@@ -19,19 +19,18 @@ public class TelaFront extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new GridLayout(4, 1, 10, 10));
 
-// --- MUDANÇA PRINCIPAL AQUI ---
-        // Criamos um painel principal para aplicar margens
+
         JPanel painelPrincipal = new JPanel();
 
-        // GridLayout: 4 linhas, 1 coluna, 15px de espaço vertical entre botões
+
         painelPrincipal.setLayout(new GridLayout(4, 1, 0, 15));
 
-        // EmptyBorder(Top, Left, Bottom, Right) -> Margem de 40px nos lados e 20px em cima/baixo
+
         painelPrincipal.setBorder(new EmptyBorder(20, 60, 20, 60));
 
-        // Adiciona o painel à janela
+
         setContentPane(painelPrincipal);
-        // ------------------------------
+
         JButton btnAluno = new JButton("Cadastrar Aluno");
         JButton btnLivro = new JButton("Cadastrar Livro");
         JButton btnEmprestimo = new JButton("Novo Emprestimo");
@@ -46,6 +45,7 @@ public class TelaFront extends JFrame {
 
         btnAluno.addActionListener(e -> abrirCadastroAluno());
         btnLivro.addActionListener(e -> abrirCadastroLivro());
+        btnEmprestimo.addActionListener(e -> abrirNovoEmprestimo());
         btnSair.addActionListener(e -> System.exit(0));
 
         add(btnAluno);
@@ -62,6 +62,11 @@ public class TelaFront extends JFrame {
     private void abrirCadastroLivro(){
         TelaCadastroLivro telaLivro = new TelaCadastroLivro(this.service);
         telaLivro.setVisible(true);
+    }
+
+    private void abrirNovoEmprestimo(){
+        TelaEmprestimo telaEmp = new TelaEmprestimo(this.service);
+        telaEmp.setVisible(true);
     }
 
 }
