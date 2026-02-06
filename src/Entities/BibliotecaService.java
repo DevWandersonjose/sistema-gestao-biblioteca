@@ -26,6 +26,7 @@ public class BibliotecaService {
         GerenciadorDeArquivos.carregarEmprestimos(this.emprestimos);
         System.out.println("Base de dados Carregada");
     }
+
     public void cadastrarAluno() {
         System.out.println("-----CADASTRAR ALUNO-----");
         System.out.println("Nome do aluno: ");
@@ -42,8 +43,10 @@ public class BibliotecaService {
         Aluno novo = new Aluno(nome, matricula, classe, responsavel, telefone);
         alunos.add(novo);
         GerenciadorDeArquivos.salvarNoCsv(novo);
-        System.out.println("Aluno cadastrado com sucesso");;
+        System.out.println("Aluno cadastrado com sucesso");
+        ;
     }
+
     public void cadastrarLivro() {
         System.out.println("--- CADASTRAR LIVRO ---");
         System.out.println("Código de Barras: ");
@@ -62,6 +65,7 @@ public class BibliotecaService {
         GerenciadorDeArquivos.salvarLivro(novo);
         System.out.println("Livro cadastrado com sucesso!");
     }
+
     public void novoEmprestimo() {
         System.out.println("--- NOVO EMPRÉSTIMO ---");
         System.out.println("Nome do aluno: ");
@@ -87,7 +91,7 @@ public class BibliotecaService {
             System.out.println("Período (dias): ");
 
             int dias = 0;
-            if(sc.hasNextInt()) {
+            if (sc.hasNextInt()) {
                 dias = sc.nextInt();
                 sc.nextLine();
             } else {
@@ -102,6 +106,7 @@ public class BibliotecaService {
             System.out.println("Empréstimo registrado!");
         }
     }
+
     public void consultarEmprestimosPorAluno() {
         System.out.println("-----CONSULTAR EMPRESTIMOS-----");
         System.out.println("Nome do aluno (ou parte dele): ");
@@ -119,6 +124,7 @@ public class BibliotecaService {
             System.out.println("Nenhum empréstimo encontrado.");
         }
     }
+
     public void devolverLivro() {
         System.out.println("--- DEVOLUÇÃO LIVRO ---");
         System.out.println("Nome do aluno: ");
@@ -147,6 +153,7 @@ public class BibliotecaService {
             System.out.println("Erro: Empréstimo não encontrado.");
         }
     }
+
     public void consultarLivrosCadastrados() {
         System.out.println("Livros cadastrados:");
         for (Livro l : livros) {
@@ -154,7 +161,7 @@ public class BibliotecaService {
         }
     }
 
-    public void menuAtualizacao(){
+    public void menuAtualizacao() {
         System.out.println("--- MENU ATUALIZACAO ---");
         System.out.println("Digite o que deseja atualizar: ");
         System.out.println("1- Atualizar Livro");
@@ -165,7 +172,7 @@ public class BibliotecaService {
         if (sc.hasNextInt()) {
             opcao = sc.nextInt();
             sc.nextLine();
-        }else{
+        } else {
             sc.nextLine();
         }
         switch (opcao) {
@@ -179,6 +186,7 @@ public class BibliotecaService {
                 break;
         }
     }
+
     public void atualizarAluno() {
         System.out.println("Digite a Matricula ou nome do aluno para atualizar: ");
         String buscaAluno = sc.nextLine();
@@ -186,8 +194,8 @@ public class BibliotecaService {
         Aluno alunoEncontrado = null;
 
         for (Aluno a : alunos) {
-            boolean acheiMatricula =  a.getMatricula().equalsIgnoreCase(buscaAluno);
-            boolean acheiNome =  a.getNome().equalsIgnoreCase(buscaAluno);
+            boolean acheiMatricula = a.getMatricula().equalsIgnoreCase(buscaAluno);
+            boolean acheiNome = a.getNome().equalsIgnoreCase(buscaAluno);
 
             if (acheiMatricula || acheiNome) {
                 alunoEncontrado = a;
@@ -209,14 +217,14 @@ public class BibliotecaService {
             if (!novoMatricula.isEmpty()) alunoEncontrado.setMatricula(novoMatricula);
             System.out.println("Matricula atualizada!!");
 
-            System.out.println("Classe[" +  alunoEncontrado.getClasse() + "]: ");
+            System.out.println("Classe[" + alunoEncontrado.getClasse() + "]: ");
             String novoClasse = sc.nextLine();
             if (!novoClasse.isEmpty()) alunoEncontrado.setClasse(novoClasse);
             System.out.println("Classe atualizada!!");
 
-            System.out.println("Responsável[" +  alunoEncontrado.getResponsavel() + "]: ");
+            System.out.println("Responsável[" + alunoEncontrado.getResponsavel() + "]: ");
             String novoResponsavel = sc.nextLine();
-            if (!novoResponsavel.isEmpty())  alunoEncontrado.setResponsavel(novoResponsavel);
+            if (!novoResponsavel.isEmpty()) alunoEncontrado.setResponsavel(novoResponsavel);
             System.out.println("Responsavel atualizado!!");
 
             System.out.println("Telefone[" + alunoEncontrado.getNumeroTelefone() + "]");
@@ -229,26 +237,27 @@ public class BibliotecaService {
             System.out.println("Dados do Aluno " + alunoEncontrado.getNome() + " atualizado!!");
 
 
-        }else{
+        } else {
             System.out.println("Erro: Aluno[" + buscaAluno + "] Nao Encontrado!");
         }
     }
 
-    public void atualizarLivro(){
+    public void atualizarLivro() {
         System.out.println("Digite o Codigo ou nome do livro para atualizar: ");
         String buscaLivro = sc.nextLine();
 
         Livro livroEncontrado = null;
 
         for (Livro l : livros) {
-            boolean acheiNomeLivro =  l.getNome().equalsIgnoreCase(buscaLivro);
+            boolean acheiNomeLivro = l.getNome().equalsIgnoreCase(buscaLivro);
             boolean acheiCodigoLivro = l.getCodigoBarras().equalsIgnoreCase(buscaLivro);
 
             if (acheiNomeLivro || acheiCodigoLivro) {
                 livroEncontrado = l;
                 break;
             }
-        }if (livroEncontrado != null) {
+        }
+        if (livroEncontrado != null) {
             System.out.println("Livro encontrado [" + livroEncontrado.getNome() + "] Código[" + livroEncontrado.getCodigoBarras() + "]");
             System.out.println("DICA: Deixe em branco e aperte ENTER para manter o valor atual.");
             System.out.println("-------------------------------------------------------------");
@@ -276,14 +285,14 @@ public class BibliotecaService {
             GerenciadorDeArquivos.atualizarArquivoLivros(livros);
             System.out.println("Livro atualizado!!");
 
-        }else{
+        } else {
             System.out.println("Livro[" + buscaLivro + "] Nao Encontrado!");
         }
 
     }
 
 
-    public void salvarAlunoInterface(String nome, String matricula, String classe, String responsavel, String telefone){
+    public void salvarAlunoInterface(String nome, String matricula, String classe, String responsavel, String telefone) {
         Aluno novoAluno = new Aluno(nome, matricula, classe, responsavel, telefone);
         alunos.add(novoAluno);
         GerenciadorDeArquivos.salvarNoCsv(novoAluno);
@@ -291,14 +300,14 @@ public class BibliotecaService {
     }
 
     public void salvarLivroInterface(String codigo, String titulo, String autor, String categoria, String descricao) {
-        Livro novoLivro =  new Livro(codigo, titulo, autor, categoria, descricao);
+        Livro novoLivro = new Livro(codigo, titulo, autor, categoria, descricao);
         livros.add(novoLivro);
         GerenciadorDeArquivos.salvarLivro(novoLivro);
     }
 
     public boolean emprestarLivroInterface(String nomeAluno, String codigoLivro, String dataInicial, int dias) {
         Livro livroEncontrado = buscarLivroPorTermo(codigoLivro);
-        if (livroEncontrado == null){
+        if (livroEncontrado == null) {
             return false;
         }
         Emprestimo emp = new Emprestimo(nomeAluno, livroEncontrado.getCodigoBarras(), livroEncontrado.getNome(), dataInicial, dias);
@@ -307,6 +316,7 @@ public class BibliotecaService {
         GerenciadorDeArquivos.salvarEmprestimo(emp);
         return true;
     }
+
     public Livro buscarLivroPorTermo(String termo) {
         for (Livro l : livros) {
             if (l.getCodigoBarras().equalsIgnoreCase(termo) || l.getNome().equalsIgnoreCase(termo)) {
@@ -315,7 +325,28 @@ public class BibliotecaService {
         }
         return null;
     }
+
+    public boolean devolverLivroInterface(String nomeAluno, String termoBusca) {
+        Emprestimo emprestimoParaDevolver = null;
+
+
+        for (Emprestimo e : emprestimos) {
+            boolean alunoConfere = e.getNomeAluno().equalsIgnoreCase(nomeAluno);
+
+            boolean livroConfere = e.getNomeLivro().equalsIgnoreCase(termoBusca) ||
+                    e.getCodigoBarras().equalsIgnoreCase(termoBusca);
+
+            if (alunoConfere && livroConfere) {
+                emprestimoParaDevolver = e;
+                break;
+            }
+        }
+        if (emprestimoParaDevolver != null) {
+            emprestimos.remove(emprestimoParaDevolver);
+            GerenciadorDeArquivos.atualizarArquivoEmprestimos(emprestimos);
+            return true;
+        }
+        return false;
     }
-
-
+}
 

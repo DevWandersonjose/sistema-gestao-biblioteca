@@ -13,60 +13,50 @@ public class TelaFront extends JFrame {
     public TelaFront() {
         this.service = new BibliotecaService();
 
-        setTitle("Biblioteca Logosófica");
-        setSize(800, 600);
+        setTitle("Biblioteca Logosófica - Menu Principal");
+        setSize(400, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(4, 1, 10, 10));
 
 
-        JPanel painelPrincipal = new JPanel();
+        JPanel painel = new JPanel();
+        painel.setLayout(new GridLayout(4, 1, 0, 15));
+        painel.setBorder(new EmptyBorder(30, 50, 30, 50));
+        setContentPane(painel);
 
 
-        painelPrincipal.setLayout(new GridLayout(4, 1, 0, 15));
-
-
-        painelPrincipal.setBorder(new EmptyBorder(20, 60, 20, 60));
-
-
-        setContentPane(painelPrincipal);
-
-        JButton btnAluno = new JButton("Cadastrar Aluno");
-        JButton btnLivro = new JButton("Cadastrar Livro");
-        JButton btnEmprestimo = new JButton("Novo Emprestimo");
+        JButton btnCadastros = new JButton("Cadastros");
+        JButton btnEmprestimos = new JButton("Empréstimos / Devolução");
+        JButton btnConsultas = new JButton("Consultas");
         JButton btnSair = new JButton("Sair");
 
 
-        Font fonteBotoes = new Font("Arial", Font.BOLD, 20);
-        btnAluno.setFont(fonteBotoes);
-        btnLivro.setFont(fonteBotoes);
-        btnEmprestimo.setFont(fonteBotoes);
-        btnSair.setFont(fonteBotoes);
+        Font fonte = new Font("Arial", Font.BOLD, 16);
+        btnCadastros.setFont(fonte);
+        btnEmprestimos.setFont(fonte);
+        btnConsultas.setFont(fonte);
+        btnSair.setFont(fonte);
 
-        btnAluno.addActionListener(e -> abrirCadastroAluno());
-        btnLivro.addActionListener(e -> abrirCadastroLivro());
-        btnEmprestimo.addActionListener(e -> abrirNovoEmprestimo());
+        btnCadastros.addActionListener(e -> {
+            new MenuCadastros(this.service, this).setVisible(true);
+            this.setVisible(false); // Esconde a tela principal
+        });
+
+        btnEmprestimos.addActionListener(e -> {
+            new MenuEmprestimos(this.service, this).setVisible(true);
+            this.setVisible(false);
+        });
+
+         btnConsultas.addActionListener(e -> {
+            new MenuConsultas(this.service, this).setVisible(true);
+            this.setVisible(false);
+        });
+
         btnSair.addActionListener(e -> System.exit(0));
 
-        add(btnAluno);
-        add(btnLivro);
-        add(btnEmprestimo);
-        add(btnSair);
-
-        }
-    private void abrirCadastroAluno(){
-        TelaCadastroAluno telaAluno = new TelaCadastroAluno(this.service);
-        telaAluno.setVisible(true);
+        painel.add(btnCadastros);
+        painel.add(btnEmprestimos);
+        painel.add(btnConsultas);
+        painel.add(btnSair);
     }
-
-    private void abrirCadastroLivro(){
-        TelaCadastroLivro telaLivro = new TelaCadastroLivro(this.service);
-        telaLivro.setVisible(true);
-    }
-
-    private void abrirNovoEmprestimo(){
-        TelaEmprestimo telaEmp = new TelaEmprestimo(this.service);
-        telaEmp.setVisible(true);
-    }
-
 }
