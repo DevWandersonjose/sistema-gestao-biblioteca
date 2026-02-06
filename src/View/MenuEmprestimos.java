@@ -28,8 +28,7 @@ public class MenuEmprestimos extends JFrame {
         JButton btnVoltar = new JButton("Voltar");
 
         btnNovo.addActionListener(e ->new TelaEmprestimo(this.service).setVisible(true));
-        btnDevolver.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, "Tela de Devolução em construção!"));
+        btnDevolver.addActionListener(e -> new TelaDevolucao(this.service).setVisible(true));
         btnVoltar.addActionListener(e -> {
             this.dispose();
             this.telaAnterior.setVisible(true);
