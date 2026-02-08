@@ -1,16 +1,25 @@
 package Entities;
 
-
-
 import java.io.*;
 import java.util.List;
 
 public class GerenciadorDeArquivos {
 
+    private static final String DIRETORIO_DB = "db";
 
-    private static final String CAMINHO_ALUNOS = "alunos.csv";
+    private static final String CAMINHO_ALUNOS = DIRETORIO_DB + File.separator + "alunos.csv";
+    private static final String CAMINHO_LIVROS = DIRETORIO_DB + File.separator + "livros.csv";
+    private static final String CAMINHO_EMPRESTIMOS = DIRETORIO_DB + File.separator + "emprestimos.csv";
+
+    private static void verificarDiretorio() {
+        File diretorio = new File(DIRETORIO_DB);
+        if (!diretorio.exists()) {
+            diretorio.mkdir();
+        }
+    }
 
     public static void salvarNoCsv(Aluno aluno) {
+        verificarDiretorio();
         boolean arquivoExiste = new File(CAMINHO_ALUNOS).exists();
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_ALUNOS, true))) {
@@ -27,7 +36,7 @@ public class GerenciadorDeArquivos {
             bw.write(linha);
             bw.newLine();
         } catch (IOException e) {
-            System.out.println("Erro ao escrever no CSV de Alunos: " + e.getMessage());
+            System.out.println("Erro ao salvar Aluno: " + e.getMessage());
         }
     }
 
@@ -40,7 +49,7 @@ public class GerenciadorDeArquivos {
             linha = br.readLine();
 
             while (linha != null) {
-                String[] dados = linha.split(";");
+                String[] dados = linha.split(";", -1);
                 if (dados.length >= 5) {
                     Aluno a = new Aluno(dados[0], dados[1], dados[2], dados[3], dados[4]);
                     lista.add(a);
@@ -48,23 +57,19 @@ public class GerenciadorDeArquivos {
                 linha = br.readLine();
             }
         } catch (IOException e) {
-            System.out.println("Erro ao ler no CSV de Alunos: " + e.getMessage());
+            System.out.println("Erro ao ler Alunos: " + e.getMessage());
         }
     }
 
-
-    private static final String CAMINHO_LIVROS = "livros.csv";
-
     public static void salvarLivro(Livro livro) {
+        verificarDiretorio();
         boolean arquivoExiste = new File(CAMINHO_LIVROS).exists();
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_LIVROS, true))) {
             if (!arquivoExiste) {
-
                 bw.write("Codigo;Nome;Autor;Categoria;Descrição");
                 bw.newLine();
             }
-
             String linha = livro.getCodigoBarras() + ";" +
                     livro.getNome() + ";" +
                     livro.getAutor() + ";" +
@@ -74,7 +79,7 @@ public class GerenciadorDeArquivos {
             bw.write(linha);
             bw.newLine();
         } catch (IOException e) {
-            System.out.println("Erro ao escrever no CSV de Livros: " + e.getMessage());
+            System.out.println("Erro ao salvar Livro: " + e.getMessage());
         }
     }
 
@@ -87,24 +92,20 @@ public class GerenciadorDeArquivos {
             linha = br.readLine();
 
             while (linha != null) {
-                String[] dados = linha.split(";");
-
+                String[] dados = linha.split(";", -1);
                 if (dados.length >= 5) {
-
                     Livro l = new Livro(dados[0], dados[1], dados[2], dados[3], dados[4]);
                     lista.add(l);
                 }
                 linha = br.readLine();
             }
         } catch (IOException e) {
-            System.out.println("Erro ao ler no CSV de Livros: " + e.getMessage());
+            System.out.println("Erro ao ler Livros: " + e.getMessage());
         }
     }
 
-
-    private static final String CAMINHO_EMPRESTIMOS = "emprestimos.csv";
-
     public static void salvarEmprestimo(Emprestimo emp) {
+        verificarDiretorio();
         boolean arquivoExiste = new File(CAMINHO_EMPRESTIMOS).exists();
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_EMPRESTIMOS, true))) {
@@ -128,7 +129,7 @@ public class GerenciadorDeArquivos {
             linha = br.readLine();
 
             while (linha != null) {
-                String[] dados = linha.split(";");
+                String[] dados = linha.split(";", -1);
                 if (dados.length >= 5) {
                     Emprestimo emp = new Emprestimo(dados[0], dados[1], dados[2], dados[3], dados[4]);
                     lista.add(emp);
@@ -140,52 +141,47 @@ public class GerenciadorDeArquivos {
         }
     }
 
+    public static void atualizarArquivoAlunos(List<Aluno> lista) {
+        verificarDiretorio();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_ALUNOS, false))) {
+            bw.write("Nome;Matricula;Classe;Responsavel;Telefone");
+            bw.newLine();
+            for (Aluno a : lista) {
+                String linha = a.getNome() + ";" + a.getMatricula() + ";" + a.getClasse() + ";" + a.getResponsavel() + ";" + a.getNumeroTelefone();
+                bw.write(linha);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao atualizar Alunos: " + e.getMessage());
+        }
+    }
+
+    public static void atualizarArquivoLivros(List<Livro> lista) {
+        verificarDiretorio();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_LIVROS, false))) {
+            bw.write("Codigo;Nome;Autor;Categoria;Descrição");
+            bw.newLine();
+            for (Livro l : lista) {
+                String linha = l.getCodigoBarras() + ";" + l.getNome() + ";" + l.getAutor() + ";" + l.getCategoria() + ";" + l.getDescricao();
+                bw.write(linha);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao atualizar Livros: " + e.getMessage());
+        }
+    }
+
     public static void atualizarArquivoEmprestimos(List<Emprestimo> lista) {
-        try (BufferedWriter bw  = new BufferedWriter(new FileWriter(CAMINHO_EMPRESTIMOS, false))){
-            bw.write("NomeAluno;codigoBarras;NomeLivro;DataEmprestimo;DataDevolucao");
+        verificarDiretorio();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_EMPRESTIMOS, false))) {
+            bw.write("NomeAluno;CodigoBarras;NomeLivro;DataEmprestimo;DataDevolucao");
             bw.newLine();
             for (Emprestimo e : lista) {
                 bw.write(e.toCSV());
                 bw.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Erro ao atualizar arquivo Emprestimo: " + e.getMessage());
-        }
-
-    }
-    public static void atualizarArquivoAlunos(List<Aluno> lista) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_ALUNOS, false))) {
-            bw.write("Nome;Matricula;Classe;Responsavel;Telefone");
-            bw.newLine();
-            for (Aluno a : lista) {
-                String linha = a.getNome() + ";" +
-                        a.getMatricula() + ";" +
-                        a.getClasse() + ";" +
-                        a.getResponsavel() + ";" +
-                        a.getNumeroTelefone();
-                bw.write(linha);
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao atualizar arquivo de Alunos: " + e.getMessage());
-        }
-    }
-
-    public static void atualizarArquivoLivros(List<Livro> lista) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_LIVROS, false))){
-            bw.write("Codigo;Nome;Autor;Categoria;Descrição");
-            bw.newLine();
-            for (Livro l : lista) {
-                String linha = l.getCodigoBarras() + ";" +
-                        l.getNome() + ";" +
-                        l.getAutor() + ";" +
-                        l.getCategoria() + ";" +
-                        l.getDescricao();
-                bw.write(linha);
-                bw.newLine();
-            }
-        }catch (IOException e) {
-            System.out.println("Erro ao atualizar arquivo de Livros: " + e.getMessage());
+            System.out.println("Erro ao atualizar Empréstimos: " + e.getMessage());
         }
     }
 }

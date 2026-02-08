@@ -348,5 +348,23 @@ public class BibliotecaService {
         }
         return false;
     }
+
+    public boolean alunoJaCadastrado (String nomeAluno, String matricula) {
+
+        for (Aluno aluno : alunos) {
+            if (aluno.getMatricula().equalsIgnoreCase(matricula)) {
+                return true;
+            }if(aluno.getNome().equalsIgnoreCase(nomeAluno)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+    public List<Aluno> getTodosAlunos() { return this.alunos; }
+    public List<Livro> getTodosLivros() { return this.livros; }
+    public List<Emprestimo> getTodosEmprestimos() { return this.emprestimos; }
+
+
 }
 

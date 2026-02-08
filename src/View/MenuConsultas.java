@@ -20,7 +20,7 @@ public class MenuConsultas extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel painel = new JPanel(new GridLayout(4, 1, 0 , 15));
-        painel.setBorder(new EmptyBorder(40, 60, 40, 60));
+        painel.setBorder(new EmptyBorder(30, 50, 30, 50));
         setContentPane(painel);
 
         JButton btnListarAlunos = new JButton("Listar Alunos");
@@ -28,18 +28,27 @@ public class MenuConsultas extends JFrame {
         JButton btnListarEmprestimos = new JButton("Listar Emprestimos");
         JButton btnVoltar = new JButton("Voltar");
 
-        btnListarAlunos.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, "Serviço em construção!"));
+        btnListarAlunos.addActionListener(e -> new TelaConsultaSimples(service, "ALUNOS").setVisible(true));
 
-        btnListarLivros.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, "Serviço em construção!"));
+        btnListarLivros.addActionListener(e -> new TelaConsultaSimples(service, "LIVROS").setVisible(true));
 
-        btnListarEmprestimos.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, "Serviço em Construção!"));
+        btnListarEmprestimos.addActionListener(e ->new TelaRelatorioEmprestimos(service).setVisible(true));
 
         btnVoltar.addActionListener(e -> {
             this.dispose();
             this.telaAnterior.setVisible(true);
+        });
+
+        painel.add(btnListarAlunos);
+        painel.add(btnListarLivros);
+        painel.add(btnListarEmprestimos);
+        painel.add(btnVoltar);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                telaAnterior.setVisible(true);
+            }
         });
     }
 }

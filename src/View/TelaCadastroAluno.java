@@ -58,6 +58,9 @@ public class TelaCadastroAluno extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Nome e Matricula sao obrigatorios!");
             return;
         }
+        if(service.alunoJaCadastrado(nome, matricula)){
+            JOptionPane.showMessageDialog(this, "ERRO: Aluno ja cadastrado!!");
+        }
         service.salvarAlunoInterface(nome, matricula, classe, responsavel, telefone);
         JOptionPane.showMessageDialog(this, "Aluno salvo com sucesso!");
 
