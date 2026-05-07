@@ -1,62 +1,49 @@
 package View;
 
 import Entities.BibliotecaService;
-
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class TelaFront extends JFrame {
     private BibliotecaService service;
 
-
     public TelaFront() {
         this.service = new BibliotecaService();
-
-        setTitle("Biblioteca Logosófica - Menu Principal");
-        setSize(400, 350);
+        setTitle("Corumbá Sistemas - Gestão Inteligente");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
+        add(Estilos.criarPainelTopo("CORUMBÁ SISTEMAS"), BorderLayout.NORTH);
 
-        JPanel painel = new JPanel();
-        painel.setLayout(new GridLayout(4, 1, 0, 15));
-        painel.setBorder(new EmptyBorder(30, 50, 30, 50));
-        setContentPane(painel);
+        JPanel pCentro = new JPanel(new GridBagLayout());
+        pCentro.setBackground(Estilos.CINZA_CASCALHO);
 
+        JPanel menu = new JPanel(new GridLayout(4, 1, 0, 20));
+        Estilos.configurarPainelCard(menu);
 
-        JButton btnCadastros = new JButton("Cadastros");
-        JButton btnEmprestimos = new JButton("Empréstimos / Devolução");
-        JButton btnConsultas = new JButton("Consultas");
-        JButton btnSair = new JButton("Sair");
+        JButton btnCad = new JButton("CADASTROS");
+        JButton btnEmp = new JButton("GESTÃO DE EMPRÉSTIMOS");
+        JButton btnCon = new JButton("CONSULTAS E RELATÓRIOS");
+        JButton btnSair = new JButton("SAIR");
 
+        Estilos.aplicarEstiloBotao(btnCad);
+        Estilos.aplicarEstiloBotao(btnEmp);
+        Estilos.aplicarEstiloBotao(btnCon);
+        Estilos.aplicarEstiloBotao(btnSair);
+        btnSair.setBackground(new Color(100, 100, 100));
 
-        Font fonte = new Font("Arial", Font.BOLD, 16);
-        btnCadastros.setFont(fonte);
-        btnEmprestimos.setFont(fonte);
-        btnConsultas.setFont(fonte);
-        btnSair.setFont(fonte);
+        Dimension d = new Dimension(300, 55);
+        btnCad.setPreferredSize(d); btnEmp.setPreferredSize(d); btnCon.setPreferredSize(d); btnSair.setPreferredSize(d);
 
-        btnCadastros.addActionListener(e -> {
-            new MenuCadastros(this.service, this).setVisible(true);
-            this.setVisible(false); // Esconde a tela principal
-        });
-
-        btnEmprestimos.addActionListener(e -> {
-            new MenuEmprestimos(this.service, this).setVisible(true);
-            this.setVisible(false);
-        });
-
-         btnConsultas.addActionListener(e -> {
-            new MenuConsultas(this.service, this).setVisible(true);
-            this.setVisible(false);
-        });
-
+        btnCad.addActionListener(e -> { new MenuCadastros(service, this).setVisible(true); setVisible(false); });
+        btnEmp.addActionListener(e -> { new MenuEmprestimos(service, this).setVisible(true); setVisible(false); });
+        btnCon.addActionListener(e -> { new MenuConsultas(service, this).setVisible(true); setVisible(false); });
         btnSair.addActionListener(e -> System.exit(0));
 
-        painel.add(btnCadastros);
-        painel.add(btnEmprestimos);
-        painel.add(btnConsultas);
-        painel.add(btnSair);
+        menu.add(btnCad); menu.add(btnEmp); menu.add(btnCon); menu.add(btnSair);
+        pCentro.add(menu);
+        add(pCentro, BorderLayout.CENTER);
+        add(Estilos.criarPainelRodape(), BorderLayout.SOUTH);
     }
 }

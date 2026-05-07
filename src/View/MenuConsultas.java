@@ -1,9 +1,7 @@
 package View;
 
 import Entities.BibliotecaService;
-
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class MenuConsultas extends JFrame {
@@ -14,35 +12,53 @@ public class MenuConsultas extends JFrame {
         this.service = service;
         this.telaAnterior = telaAnterior;
 
-        setTitle("Consultas");
-        setSize(400, 300);
+        setTitle("Consultas - Corumbá Sistemas");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
 
-        JPanel painel = new JPanel(new GridLayout(4, 1, 0 , 15));
-        painel.setBorder(new EmptyBorder(30, 50, 30, 50));
-        setContentPane(painel);
+        setLayout(new BorderLayout());
+        add(Estilos.criarPainelTopo("CONSULTAS E RELATÓRIOS"), BorderLayout.NORTH);
 
-        JButton btnListarAlunos = new JButton("Listar Alunos");
-        JButton btnListarLivros = new JButton("Listar Livros");
-        JButton btnListarEmprestimos = new JButton("Listar Emprestimos");
-        JButton btnVoltar = new JButton("Voltar");
+        JPanel painelFundo = new JPanel(new GridBagLayout());
+        painelFundo.setBackground(Estilos.CINZA_CASCALHO);
 
-        btnListarAlunos.addActionListener(e -> new TelaConsultaSimples(service, "ALUNOS").setVisible(true));
+        JPanel painelCard = new JPanel(new GridLayout(4, 1, 0 , 20));
+        Estilos.configurarPainelCard(painelCard);
 
-        btnListarLivros.addActionListener(e -> new TelaConsultaSimples(service, "LIVROS").setVisible(true));
+        JButton btnAlunos = new JButton("LISTAR ALUNOS");
+        JButton btnLivros = new JButton("LISTAR LIVROS");
+        JButton btnRelatorio = new JButton("RELATÓRIO EMPRÉSTIMOS");
+        JButton btnVoltar = new JButton("VOLTAR");
 
-        btnListarEmprestimos.addActionListener(e ->new TelaRelatorioEmprestimos(service).setVisible(true));
+        Estilos.aplicarEstiloBotao(btnAlunos);
+        Estilos.aplicarEstiloBotao(btnLivros);
+        Estilos.aplicarEstiloBotao(btnRelatorio);
+        Estilos.aplicarEstiloBotao(btnVoltar);
+        btnVoltar.setBackground(Color.GRAY);
+
+        Dimension btnSize = new Dimension(300, 55);
+        btnAlunos.setPreferredSize(btnSize);
+        btnLivros.setPreferredSize(btnSize);
+        btnRelatorio.setPreferredSize(btnSize);
+        btnVoltar.setPreferredSize(btnSize);
+
+        btnAlunos.addActionListener(e -> new TelaConsultaSimples(service, "ALUNOS").setVisible(true));
+        btnLivros.addActionListener(e -> new TelaConsultaSimples(service, "LIVROS").setVisible(true));
+        btnRelatorio.addActionListener(e -> new TelaRelatorioEmprestimos(service).setVisible(true));
 
         btnVoltar.addActionListener(e -> {
             this.dispose();
             this.telaAnterior.setVisible(true);
         });
 
-        painel.add(btnListarAlunos);
-        painel.add(btnListarLivros);
-        painel.add(btnListarEmprestimos);
-        painel.add(btnVoltar);
+        painelCard.add(btnAlunos);
+        painelCard.add(btnLivros);
+        painelCard.add(btnRelatorio);
+        painelCard.add(btnVoltar);
+
+        painelFundo.add(painelCard);
+        add(painelFundo, BorderLayout.CENTER);
+        add(Estilos.criarPainelRodape(), BorderLayout.SOUTH);
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

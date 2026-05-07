@@ -1,9 +1,7 @@
 package View;
 
 import Entities.BibliotecaService;
-
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class MenuCadastros extends JFrame {
@@ -14,18 +12,32 @@ public class MenuCadastros extends JFrame {
         this.service = service;
         this.telaAnterior = telaAnterior;
 
-        setTitle("Menu de Cadastros");
-        setSize(400, 300);
+        setTitle("Menu de Cadastros - Corumbá Sistemas");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
 
-        JPanel painel = new JPanel(new GridLayout(3, 1, 0, 15));
-        painel.setBorder(new EmptyBorder(40, 60, 40, 60));
-        setContentPane(painel);
+        setLayout(new BorderLayout());
+        add(Estilos.criarPainelTopo("MENU DE CADASTROS"), BorderLayout.NORTH);
 
-        JButton btnAluno = new JButton("Cadastrar Aluno");
-        JButton btnLivro = new JButton("Cadastrar Livro");
-        JButton btnVoltar = new JButton("Voltar");
+        JPanel painelFundo = new JPanel(new GridBagLayout());
+        painelFundo.setBackground(Estilos.CINZA_CASCALHO);
+
+        JPanel painelCard = new JPanel(new GridLayout(3, 1, 0, 20));
+        Estilos.configurarPainelCard(painelCard);
+
+        JButton btnAluno = new JButton("CADASTRAR ALUNO");
+        JButton btnLivro = new JButton("CADASTRAR LIVRO");
+        JButton btnVoltar = new JButton("VOLTAR");
+
+        Estilos.aplicarEstiloBotao(btnAluno);
+        Estilos.aplicarEstiloBotao(btnLivro);
+        Estilos.aplicarEstiloBotao(btnVoltar);
+        btnVoltar.setBackground(Color.GRAY);
+
+        Dimension btnSize = new Dimension(300, 55);
+        btnAluno.setPreferredSize(btnSize);
+        btnLivro.setPreferredSize(btnSize);
+        btnVoltar.setPreferredSize(btnSize);
 
         btnAluno.addActionListener(e -> new TelaCadastroAluno(this.service).setVisible(true));
         btnLivro.addActionListener(e -> new TelaCadastroLivro(this.service).setVisible(true));
@@ -34,9 +46,14 @@ public class MenuCadastros extends JFrame {
             this.dispose();
             this.telaAnterior.setVisible(true);
         });
-        painel.add(btnAluno);
-        painel.add(btnLivro);
-        painel.add(btnVoltar);
+
+        painelCard.add(btnAluno);
+        painelCard.add(btnLivro);
+        painelCard.add(btnVoltar);
+
+        painelFundo.add(painelCard);
+        add(painelFundo, BorderLayout.CENTER);
+        add(Estilos.criarPainelRodape(), BorderLayout.SOUTH);
 
         addWindowListener(new java.awt.event.WindowAdapter(){
             @Override

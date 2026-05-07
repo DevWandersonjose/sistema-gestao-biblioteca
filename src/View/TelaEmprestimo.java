@@ -7,9 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class TelaEmprestimo extends JFrame {
-
     private BibliotecaService service;
-
     private JTextField txtNomeAluno;
     private JTextField txtCodigoLivro;
     private JTextField txtData;
@@ -18,40 +16,68 @@ public class TelaEmprestimo extends JFrame {
     public TelaEmprestimo(BibliotecaService service) {
         this.service = service;
 
-        setTitle("Novo Empréstimo");
-        setSize(400, 300);
-        setLayout(new GridLayout(5, 2, 10, 10));
-        setLocationRelativeTo(null);
+        setTitle("Empréstimo - Corumbá Sistemas");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        add(Estilos.criarPainelTopo("REGISTRAR EMPRÉSTIMO"), BorderLayout.NORTH);
+
+        JPanel painelFundo = new JPanel(new GridBagLayout());
+        painelFundo.setBackground(Estilos.CINZA_CASCALHO);
+
+        JPanel painelCard = new JPanel(new BorderLayout());
+        Estilos.configurarPainelCard(painelCard);
+
+        JPanel painelForm = new JPanel(new GridLayout(5, 2, 10, 20));
+        painelForm.setBackground(Estilos.BRANCO_PURO);
 
         txtNomeAluno = new JTextField();
         txtCodigoLivro = new JTextField();
         txtData = new JTextField();
         txtDias = new JTextField();
 
-
         txtData.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         txtDias.setText("7");
 
-        add(new JLabel("  Nome do Aluno:"));
-        add(txtNomeAluno);
+        painelForm.add(criarLabel("Nome do Aluno:"));
+        painelForm.add(txtNomeAluno);
+        painelForm.add(criarLabel("Cód. Barras ou Livro:"));
+        painelForm.add(txtCodigoLivro);
+        painelForm.add(criarLabel("Data Empréstimo:"));
+        painelForm.add(txtData);
+        painelForm.add(criarLabel("Dias para devolver:"));
+        painelForm.add(txtDias);
 
-        add(new JLabel("  Cód. Barras ou Nome Livro:"));
-        add(txtCodigoLivro);
+        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        painelBotoes.setBackground(Estilos.BRANCO_PURO);
+        painelBotoes.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
-        add(new JLabel("  Data Empréstimo:"));
-        add(txtData);
+        JButton btnConfirmar = new JButton("CONFIRMAR");
+        JButton btnCancelar = new JButton("CANCELAR");
 
-        add(new JLabel("  Dias para devolver:"));
-        add(txtDias);
+        Estilos.aplicarEstiloBotao(btnConfirmar);
+        Estilos.aplicarEstiloBotao(btnCancelar);
+        btnCancelar.setBackground(Color.GRAY);
 
-        JButton btnConfirmar = new JButton("Confirmar");
-        JButton btnCancelar = new JButton("Cancelar");
+        painelBotoes.add(btnConfirmar);
+        painelBotoes.add(btnCancelar);
 
-        add(btnConfirmar);
-        add(btnCancelar);
+        painelCard.add(painelForm, BorderLayout.CENTER);
+        painelCard.add(painelBotoes, BorderLayout.SOUTH);
+        painelFundo.add(painelCard);
+        add(painelFundo, BorderLayout.CENTER);
+        add(Estilos.criarPainelRodape(), BorderLayout.SOUTH);
 
         btnConfirmar.addActionListener(e -> confirmarEmprestimo());
         btnCancelar.addActionListener(e -> dispose());
+    }
+
+    private JLabel criarLabel(String texto) {
+        JLabel lbl = new JLabel(texto);
+        lbl.setFont(Estilos.FONTE_SUBTITULO);
+        lbl.setForeground(Estilos.AZUL_OCEANO);
+        return lbl;
     }
 
     private void confirmarEmprestimo() {
@@ -64,19 +90,15 @@ public class TelaEmprestimo extends JFrame {
             JOptionPane.showMessageDialog(this, "Preencha Aluno e Livro!");
             return;
         }
-
         try {
             int dias = Integer.parseInt(diasTexto);
-
             boolean sucesso = service.emprestarLivroInterface(aluno, livro, data, dias);
-
             if (sucesso) {
                 JOptionPane.showMessageDialog(this, "Empréstimo registrado com sucesso!");
-                dispose(); // Fecha a janela
+                dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "ERRO: Livro não encontrado na biblioteca!");
+                JOptionPane.showMessageDialog(this, "ERRO: Livro não encontrado ou sem estoque!");
             }
-
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "O campo 'Dias' deve ser um número!");
         } catch (Exception e) {

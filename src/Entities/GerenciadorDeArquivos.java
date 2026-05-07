@@ -4,184 +4,83 @@ import java.io.*;
 import java.util.List;
 
 public class GerenciadorDeArquivos {
+    private static final String DIR = "db";
+    private static final String PATH_A = DIR + File.separator + "alunos.csv";
+    private static final String PATH_L = DIR + File.separator + "livros.csv";
+    private static final String PATH_E = DIR + File.separator + "emprestimos.csv";
 
-    private static final String DIRETORIO_DB = "db";
-
-    private static final String CAMINHO_ALUNOS = DIRETORIO_DB + File.separator + "alunos.csv";
-    private static final String CAMINHO_LIVROS = DIRETORIO_DB + File.separator + "livros.csv";
-    private static final String CAMINHO_EMPRESTIMOS = DIRETORIO_DB + File.separator + "emprestimos.csv";
-
-    private static void verificarDiretorio() {
-        File diretorio = new File(DIRETORIO_DB);
-        if (!diretorio.exists()) {
-            diretorio.mkdir();
-        }
+    private static void checkDir() {
+        File d = new File(DIR);
+        if (!d.exists()) d.mkdir();
     }
 
-    public static void salvarNoCsv(Aluno aluno) {
-        verificarDiretorio();
-        boolean arquivoExiste = new File(CAMINHO_ALUNOS).exists();
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_ALUNOS, true))) {
-            if (!arquivoExiste) {
-                bw.write("Nome;Matricula;Classe;Responsavel;Telefone");
-                bw.newLine();
-            }
-            String linha = aluno.getNome() + ";" +
-                    aluno.getMatricula() + ";" +
-                    aluno.getClasse() + ";" +
-                    aluno.getResponsavel() + ";" +
-                    aluno.getNumeroTelefone();
-
-            bw.write(linha);
+    public static void salvarNoCsv(Aluno a) {
+        checkDir();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(PATH_A, true))) {
+            bw.write(a.getNome() + ";" + a.getMatricula() + ";" + a.getClasse() + ";" + a.getResponsavel() + ";" + a.getNumeroTelefone());
             bw.newLine();
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar Aluno: " + e.getMessage());
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
-    public static void carregarDoCSV(List<Aluno> lista) {
-        File arquivo = new File(CAMINHO_ALUNOS);
-        if (!arquivo.exists()) return;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(CAMINHO_ALUNOS))) {
-            String linha = br.readLine();
-            linha = br.readLine();
-
-            while (linha != null) {
-                String[] dados = linha.split(";", -1);
-                if (dados.length >= 5) {
-                    Aluno a = new Aluno(dados[0], dados[1], dados[2], dados[3], dados[4]);
-                    lista.add(a);
-                }
-                linha = br.readLine();
+    public static void carregarDoCSV(List<Aluno> list) {
+        File f = new File(PATH_A);
+        if (!f.exists()) return;
+        try (BufferedReader br = new BufferedReader(new FileReader(PATH_A))) {
+            String l;
+            while ((l = br.readLine()) != null) {
+                String[] d = l.split(";", -1);
+                if (d.length >= 5) list.add(new Aluno(d[0], d[1], d[2], d[3], d[4]));
             }
-        } catch (IOException e) {
-            System.out.println("Erro ao ler Alunos: " + e.getMessage());
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
-    public static void salvarLivro(Livro livro) {
-        verificarDiretorio();
-        boolean arquivoExiste = new File(CAMINHO_LIVROS).exists();
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_LIVROS, true))) {
-            if (!arquivoExiste) {
-                bw.write("Codigo;Nome;Autor;Categoria;Descrição");
-                bw.newLine();
-            }
-            String linha = livro.getCodigoBarras() + ";" +
-                    livro.getNome() + ";" +
-                    livro.getAutor() + ";" +
-                    livro.getCategoria() + ";" +
-                    livro.getDescricao();
-
-            bw.write(linha);
+    public static void salvarLivro(Livro l) {
+        checkDir();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(PATH_L, true))) {
+            bw.write(l.getCodigoBarras() + ";" + l.getNome() + ";" + l.getAutor() + ";" + l.getCategoria() + ";" + l.getDescricao());
             bw.newLine();
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar Livro: " + e.getMessage());
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
-    public static void carregarLivros(List<Livro> lista) {
-        File arquivo = new File(CAMINHO_LIVROS);
-        if (!arquivo.exists()) return;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(CAMINHO_LIVROS))) {
-            String linha = br.readLine();
-            linha = br.readLine();
-
-            while (linha != null) {
-                String[] dados = linha.split(";", -1);
-                if (dados.length >= 5) {
-                    Livro l = new Livro(dados[0], dados[1], dados[2], dados[3], dados[4]);
-                    lista.add(l);
-                }
-                linha = br.readLine();
+    public static void carregarLivros(List<Livro> list) {
+        File f = new File(PATH_L);
+        if (!f.exists()) return;
+        try (BufferedReader br = new BufferedReader(new FileReader(PATH_L))) {
+            String l;
+            while ((l = br.readLine()) != null) {
+                String[] d = l.split(";", -1);
+                if (d.length >= 5) list.add(new Livro(d[0], d[1], d[2], d[3], d[4]));
             }
-        } catch (IOException e) {
-            System.out.println("Erro ao ler Livros: " + e.getMessage());
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     public static void salvarEmprestimo(Emprestimo emp) {
-        verificarDiretorio();
-        boolean arquivoExiste = new File(CAMINHO_EMPRESTIMOS).exists();
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_EMPRESTIMOS, true))) {
-            if (!arquivoExiste) {
-                bw.write("NomeAluno;CodigoBarras;NomeLivro;DataEmprestimo;DataDevolucao");
-                bw.newLine();
-            }
+        checkDir();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(PATH_E, true))) {
             bw.write(emp.toCSV());
             bw.newLine();
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar Empréstimo: " + e.getMessage());
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
-    public static void carregarEmprestimos(List<Emprestimo> lista) {
-        File arquivo = new File(CAMINHO_EMPRESTIMOS);
-        if (!arquivo.exists()) return;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(CAMINHO_EMPRESTIMOS))) {
-            String linha = br.readLine();
-            linha = br.readLine();
-
-            while (linha != null) {
-                String[] dados = linha.split(";", -1);
-                if (dados.length >= 5) {
-                    Emprestimo emp = new Emprestimo(dados[0], dados[1], dados[2], dados[3], dados[4]);
-                    lista.add(emp);
-                }
-                linha = br.readLine();
+    public static void carregarEmprestimos(List<Emprestimo> list) {
+        File f = new File(PATH_E);
+        if (!f.exists()) return;
+        try (BufferedReader br = new BufferedReader(new FileReader(PATH_E))) {
+            String l;
+            while ((l = br.readLine()) != null) {
+                String[] d = l.split(";", -1);
+                if (d.length >= 5) list.add(new Emprestimo(d[0], d[1], d[2], d[3], d[4]));
             }
-        } catch (IOException e) {
-            System.out.println("Erro ao ler Empréstimos: " + e.getMessage());
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
-    public static void atualizarArquivoAlunos(List<Aluno> lista) {
-        verificarDiretorio();
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_ALUNOS, false))) {
-            bw.write("Nome;Matricula;Classe;Responsavel;Telefone");
-            bw.newLine();
-            for (Aluno a : lista) {
-                String linha = a.getNome() + ";" + a.getMatricula() + ";" + a.getClasse() + ";" + a.getResponsavel() + ";" + a.getNumeroTelefone();
-                bw.write(linha);
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao atualizar Alunos: " + e.getMessage());
-        }
-    }
-
-    public static void atualizarArquivoLivros(List<Livro> lista) {
-        verificarDiretorio();
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_LIVROS, false))) {
-            bw.write("Codigo;Nome;Autor;Categoria;Descrição");
-            bw.newLine();
-            for (Livro l : lista) {
-                String linha = l.getCodigoBarras() + ";" + l.getNome() + ";" + l.getAutor() + ";" + l.getCategoria() + ";" + l.getDescricao();
-                bw.write(linha);
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao atualizar Livros: " + e.getMessage());
-        }
-    }
-
-    public static void atualizarArquivoEmprestimos(List<Emprestimo> lista) {
-        verificarDiretorio();
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CAMINHO_EMPRESTIMOS, false))) {
-            bw.write("NomeAluno;CodigoBarras;NomeLivro;DataEmprestimo;DataDevolucao");
-            bw.newLine();
-            for (Emprestimo e : lista) {
+    public static void atualizarArquivoEmprestimos(List<Emprestimo> list) {
+        checkDir();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(PATH_E, false))) {
+            for (Emprestimo e : list) {
                 bw.write(e.toCSV());
                 bw.newLine();
             }
-        } catch (IOException e) {
-            System.out.println("Erro ao atualizar Empréstimos: " + e.getMessage());
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 }

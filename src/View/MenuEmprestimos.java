@@ -1,9 +1,7 @@
 package View;
 
 import Entities.BibliotecaService;
-
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class MenuEmprestimos extends JFrame {
@@ -14,29 +12,48 @@ public class MenuEmprestimos extends JFrame {
         this.service = service;
         this.telaAnterior = telaAnterior;
 
-        setTitle("Gestao de Emprestimos");
-        setSize(400, 300);
+        setTitle("Gestão de Empréstimos - Corumbá Sistemas");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
 
-        JPanel painel = new JPanel(new GridLayout(3, 1, 0, 15));
-        painel.setBorder(new EmptyBorder(40, 60, 40, 60));
-        setContentPane(painel);
+        setLayout(new BorderLayout());
+        add(Estilos.criarPainelTopo("GESTÃO DE EMPRÉSTIMOS"), BorderLayout.NORTH);
 
-        JButton btnNovo = new JButton("Novo Empréstimo");
-        JButton btnDevolver = new JButton("Devolver Livro");
-        JButton btnVoltar = new JButton("Voltar");
+        JPanel painelFundo = new JPanel(new GridBagLayout());
+        painelFundo.setBackground(Estilos.CINZA_CASCALHO);
 
-        btnNovo.addActionListener(e ->new TelaEmprestimo(this.service).setVisible(true));
+        JPanel painelCard = new JPanel(new GridLayout(3, 1, 0, 20));
+        Estilos.configurarPainelCard(painelCard);
+
+        JButton btnNovo = new JButton("NOVO EMPRÉSTIMO");
+        JButton btnDevolver = new JButton("DEVOLVER LIVRO");
+        JButton btnVoltar = new JButton("VOLTAR");
+
+        Estilos.aplicarEstiloBotao(btnNovo);
+        Estilos.aplicarEstiloBotao(btnDevolver);
+        Estilos.aplicarEstiloBotao(btnVoltar);
+        btnVoltar.setBackground(Color.GRAY);
+
+        Dimension btnSize = new Dimension(300, 55);
+        btnNovo.setPreferredSize(btnSize);
+        btnDevolver.setPreferredSize(btnSize);
+        btnVoltar.setPreferredSize(btnSize);
+
+        btnNovo.addActionListener(e -> new TelaEmprestimo(this.service).setVisible(true));
         btnDevolver.addActionListener(e -> new TelaDevolucao(this.service).setVisible(true));
+
         btnVoltar.addActionListener(e -> {
             this.dispose();
             this.telaAnterior.setVisible(true);
         });
 
-        painel.add(btnNovo);
-        painel.add(btnDevolver);
-        painel.add(btnVoltar);
+        painelCard.add(btnNovo);
+        painelCard.add(btnDevolver);
+        painelCard.add(btnVoltar);
+
+        painelFundo.add(painelCard);
+        add(painelFundo, BorderLayout.CENTER);
+        add(Estilos.criarPainelRodape(), BorderLayout.SOUTH);
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

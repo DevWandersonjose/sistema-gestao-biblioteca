@@ -1,11 +1,10 @@
 package View;
 
 import Entities.BibliotecaService;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class TelaCadastroAluno extends javax.swing.JFrame {
+public class TelaCadastroAluno extends JFrame {
     private BibliotecaService service;
 
     private JTextField txtNome = new JTextField(20);
@@ -14,37 +13,68 @@ public class TelaCadastroAluno extends javax.swing.JFrame {
     private JTextField txtResponsavel  = new JTextField(20);
     private JTextField txtTelefone =  new JTextField(15);
 
-
     public TelaCadastroAluno(BibliotecaService serviceRecebido) {
         this.service = serviceRecebido;
 
-        setTitle("Novo Aluno");
-        setSize(400, 300);
-        setLayout(new GridLayout(6, 2, 5, 5));
-        setLocationRelativeTo(null);
+        setTitle("Novo Aluno - Corumbá Sistemas");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        setLayout(new BorderLayout());
 
-        add(new JLabel("Nome:"));
-        add(txtNome);
-        add(new JLabel("Matricula:"));
-        add(txtMatricula);
-        add(new JLabel("Classe:"));
-        add(txtClasse);
-        add(new JLabel("Responsavel:"));
-        add(txtResponsavel);
-        add(new JLabel("Telefone:"));
-        add(txtTelefone);
+        add(Estilos.criarPainelTopo("NOVO ALUNO"), BorderLayout.NORTH);
 
-        JButton btnSalvar = new JButton("Salvar");
-        add(btnSalvar);
-        JButton btnCancelar = new JButton("Cancelar");
-        add(btnCancelar);
+        JPanel painelFundo = new JPanel(new GridBagLayout());
+        painelFundo.setBackground(Estilos.CINZA_CASCALHO);
+
+        JPanel painelCard = new JPanel(new BorderLayout());
+        Estilos.configurarPainelCard(painelCard);
+
+        JPanel painelForm = new JPanel(new GridLayout(6, 2, 10, 20));
+        painelForm.setBackground(Estilos.BRANCO_PURO);
+
+        painelForm.add(criarLabel("Nome Completo:"));
+        painelForm.add(txtNome);
+        painelForm.add(criarLabel("Matrícula:"));
+        painelForm.add(txtMatricula);
+        painelForm.add(criarLabel("Classe/Turma:"));
+        painelForm.add(txtClasse);
+        painelForm.add(criarLabel("Responsável:"));
+        painelForm.add(txtResponsavel);
+        painelForm.add(criarLabel("Telefone:"));
+        painelForm.add(txtTelefone);
+
+        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        painelBotoes.setBackground(Estilos.BRANCO_PURO);
+        painelBotoes.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+
+        JButton btnSalvar = new JButton("SALVAR REGISTRO");
+        JButton btnCancelar = new JButton("CANCELAR");
+
+        Estilos.aplicarEstiloBotao(btnSalvar);
+        Estilos.aplicarEstiloBotao(btnCancelar);
+        btnCancelar.setBackground(Color.GRAY);
+
+        painelBotoes.add(btnSalvar);
+        painelBotoes.add(btnCancelar);
+
+        painelCard.add(painelForm, BorderLayout.CENTER);
+        painelCard.add(painelBotoes, BorderLayout.SOUTH);
+
+        painelFundo.add(painelCard);
+        add(painelFundo, BorderLayout.CENTER);
+
+        add(Estilos.criarPainelRodape(), BorderLayout.SOUTH);
 
         btnSalvar.addActionListener(e -> salvarDados());
         btnCancelar.addActionListener(e -> dispose());
+    }
 
-
-
+    private JLabel criarLabel(String texto) {
+        JLabel lbl = new JLabel(texto);
+        lbl.setFont(Estilos.FONTE_SUBTITULO);
+        lbl.setForeground(Estilos.AZUL_OCEANO);
+        return lbl;
     }
 
     private void salvarDados() {
@@ -55,11 +85,12 @@ public class TelaCadastroAluno extends javax.swing.JFrame {
         String telefone = txtTelefone.getText();
 
         if (nome.isEmpty() || matricula.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nome e Matricula sao obrigatorios!");
+            JOptionPane.showMessageDialog(this, "Nome e Matrícula são obrigatórios!");
             return;
         }
         if(service.alunoJaCadastrado(nome, matricula)){
-            JOptionPane.showMessageDialog(this, "ERRO: Aluno ja cadastrado!!");
+            JOptionPane.showMessageDialog(this, "ERRO: Aluno já cadastrado!!");
+            return;
         }
         service.salvarAlunoInterface(nome, matricula, classe, responsavel, telefone);
         JOptionPane.showMessageDialog(this, "Aluno salvo com sucesso!");
@@ -69,8 +100,5 @@ public class TelaCadastroAluno extends javax.swing.JFrame {
         txtClasse.setText("");
         txtResponsavel.setText("");
         txtTelefone.setText("");
-
     }
-
-
 }
